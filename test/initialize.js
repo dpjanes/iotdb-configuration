@@ -23,9 +23,12 @@
 "use strict";
 
 const _ = require("iotdb-helpers")
+const fs = require("iotdb-fs")
 
 const cfg = require("..")("cfg")
+
 const assert = require("assert")
+const path = require("path")
 
 describe("initialize", function() {
     const defaults = {
@@ -36,29 +39,42 @@ describe("initialize", function() {
         },
     };
 
+    const tmp_json = path.join(__dirname, "data/tmp.json");
+    const cfg_json = path.join(__dirname, "data/cfg.json");
+
+    const _copy = _.promise.make((self, done) => {
+        _.promise.make({})
+            .then(_.promise.add("path", cfg_json))
+            .then(fs.read.json)
+            .then(_.promise.add("path", tmp_json))
+            .then(fs.write.json)
+            .then(_.promise.done(done, self))
+            .catch(done)
+    })
+
     describe("works", function() {
-        it("empty", function(done) {
+        it("empty, no path", function(done) {
             _.promise.make({})
                 .then(cfg.initialize)
                 .then(_.promise.make(sd => {
-                    assert.deepEqual(sd.cfg, {})
+                    assert.deepEqual({}, sd.cfg);
                 }))
                 .then(_.promise.done(done))
                 .catch(done)
         })
-        it("empty with configurationd", function(done) {
+        it("empty with configurationd, no path", function(done) {
             _.promise.make({
                 configurationd: {
                 },
             })
                 .then(cfg.initialize)
                 .then(_.promise.make(sd => {
-                    assert.deepEqual(sd.cfg, {})
+                    assert.deepEqual({}, sd.cfg);
                 }))
                 .then(_.promise.done(done))
                 .catch(done)
         })
-        it("default values", function(done) {
+        it("defaults, no path", function(done) {
             _.promise.make({
                 configurationd: {
                     defaults: defaults,
@@ -66,7 +82,50 @@ describe("initialize", function() {
             })
                 .then(cfg.initialize)
                 .then(_.promise.make(sd => {
-                    assert.deepEqual(sd.cfg, defaults)
+                    assert.deepEqual(defaults, sd.cfg)
+                }))
+                .then(_.promise.done(done))
+                .catch(done)
+        })
+        it("no defaults, non-existent path", function(done) {
+            _.promise.make({
+                configurationd: {
+                    path: tmp_json,
+                },
+            })
+                .then(fs.remove.p(tmp_json))
+                .then(cfg.initialize)
+                .then(_.promise.make(sd => {
+                    assert.deepEqual({}, sd.cfg);
+                }))
+                .then(_.promise.done(done))
+                .catch(done)
+        })
+        it("no defaults, real path", function(done) {
+            _.promise.make({
+                configurationd: {
+                    path: tmp_json,
+                },
+            })
+                .then(_copy)
+                .then(cfg.initialize)
+                .then(_.promise.make(sd => {
+                    assert.deepEqual({ a: "b1", f: { i: "j" } }, sd.cfg)
+                }))
+                .then(_.promise.done(done))
+                .catch(done)
+        })
+        it("defaults, real path", function(done) {
+            _.promise.make({
+                configurationd: {
+                    path: tmp_json,
+                    defaults: defaults,
+                },
+            })
+                .then(_copy)
+                .then(cfg.initialize)
+                .then(_.promise.make(sd => {
+                    assert.deepEqual({ a: "b1", f: { i: "j", g: "h" }, c: [ "d", "e" ] }, sd.cfg)
                 }))
                 .then(_.promise.done(done))
                 .catch(done)
