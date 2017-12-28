@@ -22,4 +22,4 @@
 
 "use strict";
 
-exports.configuration = require("lib")
+module.exports = require("./lib").configuration;
