@@ -1,5 +1,5 @@
 /*
- *  test/set.js
+ *  test/put.js
  *
  *  David Janes
  *  IOTDB.org
@@ -60,7 +60,21 @@ describe("initialize", function() {
                     "key": "something",
                     "value": "dark side",
                 }))
-                .then(cfg.set)
+                .then(cfg.put)
+                .then(_.promise.make(sd => {
+                    assert.deepEqual({
+                        "something": "dark side",
+                    }, sd.cfg);
+                }))
+                .then(_.promise.done(done))
+                .catch(done)
+        })
+    })
+    describe("works - paramaterized", function() {
+        it("empty, no path", function(done) {
+            _.promise.make({})
+                .then(cfg.initialize)
+                .then(cfg.put.p("something", "dark side"))
                 .then(_.promise.make(sd => {
                     assert.deepEqual({
                         "something": "dark side",
