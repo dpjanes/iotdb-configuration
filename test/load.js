@@ -52,52 +52,106 @@ describe("load", function() {
             .catch(done)
     })
 
-    describe("works", function() {
-        it("no defaults, non-existant path", function(done) {
-            _.promise.make({
-                configurationd: {
-                    path: tmp_json,
-                },
+    describe("load", function() {
+        describe("works", function() {
+            it("no defaults, no path", function(done) {
+                _.promise.make({
+                    configurationd: {
+                    },
+                })
+                    .then(fs.remove.p(tmp_json))
+                    .then(cfg.initialize)
+                    .then(cfg.load)
+                    .then(_.promise.make(sd => {
+                        assert.deepEqual({}, sd.cfg);
+                    }))
+                    .then(_.promise.done(done))
+                    .catch(done)
             })
-                .then(fs.remove.p(tmp_json))
-                .then(cfg.initialize)
-                .then(cfg.load)
-                .then(_.promise.make(sd => {
-                    assert.deepEqual({}, sd.cfg);
-                }))
-                .then(_.promise.done(done))
-                .catch(done)
+            it("no defaults, non-existant path", function(done) {
+                _.promise.make({
+                    configurationd: {
+                        path: tmp_json,
+                    },
+                })
+                    .then(fs.remove.p(tmp_json))
+                    .then(cfg.initialize)
+                    .then(cfg.load)
+                    .then(_.promise.make(sd => {
+                        assert.deepEqual({}, sd.cfg);
+                    }))
+                    .then(_.promise.done(done))
+                    .catch(done)
+            })
+            it("no defaults, real path", function(done) {
+                _.promise.make({
+                    configurationd: {
+                        path: tmp_json,
+                    },
+                })
+                    .then(_copy)
+                    .then(cfg.initialize)
+                    .then(cfg.load)
+                    .then(_.promise.make(sd => {
+                        assert.deepEqual({ a: "b1", f: { i: "j" } }, sd.cfg)
+                    }))
+                    .then(_.promise.done(done))
+                    .catch(done)
+            })
+            it("defaults, real path", function(done) {
+                _.promise.make({
+                    configurationd: {
+                        path: tmp_json,
+                        defaults: defaults,
+                    },
+                })
+                    .then(_copy)
+                    .then(cfg.initialize)
+                    .then(cfg.load)
+                    .then(_.promise.make(sd => {
+                        assert.deepEqual({ a: "b1", f: { i: "j", g: "h" }, c: [ "d", "e" ] }, sd.cfg)
+                    }))
+                    .then(_.promise.done(done))
+                    .catch(done)
+            })
         })
-        it("no defaults, real path", function(done) {
-            _.promise.make({
-                configurationd: {
-                    path: tmp_json,
-                },
+    })
+    describe("load.clear", function() {
+        describe("works", function() {
+            it("no defaults, real path", function(done) {
+                _.promise.make({
+                    configurationd: {
+                        path: tmp_json,
+                    },
+                })
+                    .then(_copy)
+                    .then(cfg.initialize)
+                    .then(cfg.load.clear)
+                    .then(_.promise.make(sd => {
+                        assert.deepEqual({ a: "b1", f: { i: "j" } }, sd.cfg)
+                    }))
+                    .then(_.promise.done(done))
+                    .catch(done)
             })
-                .then(_copy)
-                .then(cfg.initialize)
-                .then(cfg.load)
-                .then(_.promise.make(sd => {
-                    assert.deepEqual({ a: "b1", f: { i: "j" } }, sd.cfg)
-                }))
-                .then(_.promise.done(done))
-                .catch(done)
-        })
-        it("defaults, real path", function(done) {
-            _.promise.make({
-                configurationd: {
-                    path: tmp_json,
-                    defaults: defaults,
-                },
+            it("defaults, real path", function(done) {
+                _.promise.make({
+                    configurationd: {
+                        path: tmp_json,
+                        defaults: defaults,
+                    },
+                })
+                    .then(_copy)
+                    .then(cfg.initialize)
+                    .then(_.promise.make(sd => {
+                        assert.deepEqual(defaults, sd.cfg)
+                    }))
+                    .then(cfg.load.clear)
+                    .then(_.promise.make(sd => {
+                        assert.deepEqual({ a: "b1", f: { i: "j" } }, sd.cfg)
+                    }))
+                    .then(_.promise.done(done))
+                    .catch(done)
             })
-                .then(_copy)
-                .then(cfg.initialize)
-                .then(cfg.load)
-                .then(_.promise.make(sd => {
-                    assert.deepEqual({ a: "b1", f: { i: "j", g: "h" }, c: [ "d", "e" ] }, sd.cfg)
-                }))
-                .then(_.promise.done(done))
-                .catch(done)
         })
     })
 })
