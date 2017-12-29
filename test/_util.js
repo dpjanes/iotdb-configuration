@@ -49,6 +49,9 @@ const copy = _.promise.make((self, done) => {
         .catch(done)
 })
 
+const auto_fail = done => _.promise.make(self => done(new Error("didn't expect to get here")));
+const ok_error = done => error => done(null);
+
 /**
  *  API
  */
@@ -56,3 +59,5 @@ exports.defaults = defaults;
 exports.tmp_json = tmp_json;
 exports.cfg_json = cfg_json;
 exports.copy = copy;
+exports.auto_fail = auto_fail;
+exports.ok_error = ok_error;
