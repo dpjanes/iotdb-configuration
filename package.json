@@ -28,7 +28,8 @@
         "url": "https://github.com/dpjanes/iotdb-configuration"
     }, 
     "scripts": {
-        "test": "grunt"
+        "cover": "istanbul cover _mocha -- --recursive",
+        "test": "mocha --recursive --bail"
     }, 
     "version": "0.0.0"
 }
