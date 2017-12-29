@@ -4,21 +4,21 @@
         "url": "https://github.com/dpjanes/iotdb-configuration/issues"
     }, 
     "dependencies": {
-        "iotdb-helpers": ">=3.0.0"
+        "iotdb-helpers": "~3.1.26"
     }, 
-    "description": "POP work with configuration files",
+    "description": "POP work with configuration files", 
     "devDependencies": {
-        "grunt": "", 
-        "grunt-contrib-jshint": "", 
-        "grunt-contrib-nodeunit": "", 
-        "grunt-contrib-uglify": "", 
-        "grunt-contrib-watch": "", 
-        "grunt-jsbeautifier": "",
-        "jshint-stylish": "", 
-        "load-grunt-tasks": "", 
-        "request": ""
+        "grunt": "~1.0.1", 
+        "grunt-contrib-jshint": "~1.1.0", 
+        "grunt-contrib-nodeunit": "~1.0.0", 
+        "grunt-contrib-uglify": "~3.3.0", 
+        "grunt-contrib-watch": "~1.0.0", 
+        "grunt-jsbeautifier": "~0.2.13", 
+        "jshint-stylish": "~2.2.1", 
+        "load-grunt-tasks": "~3.5.2", 
+        "request": "~2.83.0"
     }, 
-    "homepage": "https://github.com/dpjanes/node-iotdb",
+    "homepage": "https://github.com/dpjanes/node-iotdb", 
     "license": "Apache-2.0", 
     "main": "index.js", 
     "name": "iotdb-configuration", 
@@ -28,8 +28,8 @@
         "url": "https://github.com/dpjanes/iotdb-configuration"
     }, 
     "scripts": {
-        "cover": "istanbul cover _mocha -- --recursive",
+        "cover": "istanbul cover _mocha -- --recursive", 
         "test": "mocha --recursive --bail"
     }, 
-    "version": "1.0.0"
+    "version": "1.0.1"
 }
