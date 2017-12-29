@@ -30,7 +30,7 @@ const cfg = require("..")("cfg")
 const assert = require("assert")
 const path = require("path")
 
-describe("initialize", function() {
+describe("put", function() {
     const defaults = {
         a: "b",
         c: [ "d", "e" ],
@@ -52,36 +52,40 @@ describe("initialize", function() {
             .catch(done)
     })
 
-    describe("works", function() {
-        it("empty, no path", function(done) {
-            _.promise.make({})
-                .then(cfg.initialize)
-                .then(_.promise.add({
-                    "key": "something",
-                    "value": "dark side",
-                }))
-                .then(cfg.put)
-                .then(_.promise.make(sd => {
-                    assert.deepEqual({
-                        "something": "dark side",
-                    }, sd.cfg);
-                }))
-                .then(_.promise.done(done))
-                .catch(done)
+    describe("put", function() {
+        describe("good", function() {
+            it("empty, no path", function(done) {
+                _.promise.make({})
+                    .then(cfg.initialize)
+                    .then(_.promise.add({
+                        "key": "something",
+                        "value": "dark side",
+                    }))
+                    .then(cfg.put)
+                    .then(_.promise.make(sd => {
+                        assert.deepEqual({
+                            "something": "dark side",
+                        }, sd.cfg);
+                    }))
+                    .then(_.promise.done(done))
+                    .catch(done)
+            })
         })
     })
-    describe("works - paramaterized", function() {
-        it("empty, no path", function(done) {
-            _.promise.make({})
-                .then(cfg.initialize)
-                .then(cfg.put.p("something", "dark side"))
-                .then(_.promise.make(sd => {
-                    assert.deepEqual({
-                        "something": "dark side",
-                    }, sd.cfg);
-                }))
-                .then(_.promise.done(done))
-                .catch(done)
+    describe("put.p", function() {
+        describe("good", function() {
+            it("empty, no path", function(done) {
+                _.promise.make({})
+                    .then(cfg.initialize)
+                    .then(cfg.put.p("something", "dark side"))
+                    .then(_.promise.make(sd => {
+                        assert.deepEqual({
+                            "something": "dark side",
+                        }, sd.cfg);
+                    }))
+                    .then(_.promise.done(done))
+                    .catch(done)
+            })
         })
     })
 })
