@@ -6,7 +6,7 @@
     "dependencies": {
         "iotdb-helpers": ">=3.0.0"
     }, 
-    "description": "IOTDB Module", 
+    "description": "POP work with configuration files",
     "devDependencies": {
         "grunt": "", 
         "grunt-contrib-jshint": "", 
@@ -31,5 +31,5 @@
         "cover": "istanbul cover _mocha -- --recursive",
         "test": "mocha --recursive --bail"
     }, 
-    "version": "0.0.0"
+    "version": "1.0.0"
 }
