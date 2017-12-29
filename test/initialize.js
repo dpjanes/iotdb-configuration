@@ -30,15 +30,9 @@ const cfg = require("..")("cfg")
 const assert = require("assert")
 const path = require("path")
 
-describe("initialize", function() {
-    const defaults = {
-        a: "b",
-        c: [ "d", "e" ],
-        f: {
-            "g": "h",
-        },
-    };
+const _util = require("./_util")
 
+describe("initialize", function() {
     describe("works", function() {
         it("empty", function(done) {
             _.promise.make({})
@@ -64,12 +58,12 @@ describe("initialize", function() {
         it("defaults", function(done) {
             _.promise.make({
                 configurationd: {
-                    defaults: defaults,
+                    defaults: _util.defaults,
                 },
             })
                 .then(cfg.initialize)
                 .then(_.promise.make(sd => {
-                    assert.deepEqual(defaults, sd.cfg)
+                    assert.deepEqual(_util.defaults, sd.cfg)
                 }))
                 .then(_.promise.done(done))
                 .catch(done)

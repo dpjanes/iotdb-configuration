@@ -30,21 +30,15 @@ const cfg = require("..")("cfg")
 const assert = require("assert")
 const path = require("path")
 
-describe("initialize", function() {
-    const defaults = {
-        a: "b",
-        c: [ "d", "e" ],
-        f: {
-            "g": "h",
-        },
-    };
+const _util = require("./_util")
 
+describe("initialize", function() {
     describe("good", function() {
         describe("parameterized", function() {
             it("works", function(done) {
                 _.promise.make({
                     configurationd: {
-                        defaults: defaults,
+                        defaults: _util.defaults,
                     },
                 }) 
                     .then(cfg.initialize)
@@ -58,7 +52,7 @@ describe("initialize", function() {
             it("otherwise", function(done) {
                 _.promise.make({
                     configurationd: {
-                        defaults: defaults,
+                        defaults: _util.defaults,
                     },
                 }) 
                     .then(cfg.initialize)
@@ -72,7 +66,7 @@ describe("initialize", function() {
             it("otherwise into variable", function(done) {
                 _.promise.make({
                     configurationd: {
-                        defaults: defaults,
+                        defaults: _util.defaults,
                     },
                 }) 
                     .then(cfg.initialize)
@@ -86,7 +80,7 @@ describe("initialize", function() {
             it("deep into variable", function(done) {
                 _.promise.make({
                     configurationd: {
-                        defaults: defaults,
+                        defaults: _util.defaults,
                     },
                 }) 
                     .then(cfg.initialize)

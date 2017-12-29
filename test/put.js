@@ -30,28 +30,9 @@ const cfg = require("..")("cfg")
 const assert = require("assert")
 const path = require("path")
 
+const _util = require("./_util")
+
 describe("put", function() {
-    const defaults = {
-        a: "b",
-        c: [ "d", "e" ],
-        f: {
-            "g": "h",
-        },
-    };
-
-    const tmp_json = path.join(__dirname, "data/tmp.json");
-    const cfg_json = path.join(__dirname, "data/cfg.json");
-
-    const _copy = _.promise.make((self, done) => {
-        _.promise.make({})
-            .then(_.promise.add("path", cfg_json))
-            .then(fs.read.json)
-            .then(_.promise.add("path", tmp_json))
-            .then(fs.write.json)
-            .then(_.promise.done(done, self))
-            .catch(done)
-    })
-
     describe("put", function() {
         describe("good", function() {
             it("empty, no path", function(done) {

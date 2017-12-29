@@ -1,9 +1,9 @@
 /*
- *  index.js
+ *  test/_util.js
  *
  *  David Janes
  *  IOTDB.org
- *  2017-12-28
+ *  2017-12-29
  *
  *  Copyright [2013-2018] [David P. Janes]
  *
@@ -23,36 +23,36 @@
 "use strict";
 
 const _ = require("iotdb-helpers")
+const fs = require("iotdb-fs")
 
 const assert = require("assert")
+const path = require("path")
 
-const configuration = name => {
-    const method = "configuration";
+const defaults = {
+    a: "b",
+    c: [ "d", "e" ],
+    f: {
+        "g": "h",
+    },
+};
 
-    assert.ok(_.is.String(name))
+const tmp_json = path.join(__dirname, "data/tmp.json");
+const cfg_json = path.join(__dirname, "data/cfg.json");
 
-    const put = require("./put");
-    const get = require("./get");
-    const do_delete = require("./delete");
-    const load = require("./load");
-
-    const d = {
-        initialize: require("./initialize").initialize(name),
-        put: put.put(name),
-        get: get.get(name),
-        delete: do_delete.delete(name),
-        load: load.load(name),
-    }
-
-    d.put.p = put.put_p(name)
-    d.get.p = get.get_p(name)
-    d.delete.p = do_delete.delete_p(name)
-    d.load.clear = load.load_clear(name)
-
-    return d;
-}
+const copy = _.promise.make((self, done) => {
+    _.promise.make({})
+        .then(_.promise.add("path", cfg_json))
+        .then(fs.read.json)
+        .then(_.promise.add("path", tmp_json))
+        .then(fs.write.json)
+        .then(_.promise.done(done, self))
+        .catch(done)
+})
 
 /**
  *  API
  */
-exports.configuration = configuration
+exports.defaults = defaults;
+exports.tmp_json = tmp_json;
+exports.cfg_json = cfg_json;
+exports.copy = copy;

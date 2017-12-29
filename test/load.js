@@ -30,28 +30,9 @@ const cfg = require("..")("cfg")
 const assert = require("assert")
 const path = require("path")
 
+const _util = require("./_util")
+
 describe("load", function() {
-    const defaults = {
-        a: "b",
-        c: [ "d", "e" ],
-        f: {
-            "g": "h",
-        },
-    };
-
-    const tmp_json = path.join(__dirname, "data/tmp.json");
-    const cfg_json = path.join(__dirname, "data/cfg.json");
-
-    const _copy = _.promise.make((self, done) => {
-        _.promise.make({})
-            .then(_.promise.add("path", cfg_json))
-            .then(fs.read.json)
-            .then(_.promise.add("path", tmp_json))
-            .then(fs.write.json)
-            .then(_.promise.done(done, self))
-            .catch(done)
-    })
-
     describe("load", function() {
         describe("works", function() {
             it("no defaults, no path", function(done) {
@@ -59,7 +40,7 @@ describe("load", function() {
                     configurationd: {
                     },
                 })
-                    .then(fs.remove.p(tmp_json))
+                    .then(fs.remove.p(_util.tmp_json))
                     .then(cfg.initialize)
                     .then(cfg.load)
                     .then(_.promise.make(sd => {
@@ -71,10 +52,10 @@ describe("load", function() {
             it("no defaults, non-existant path", function(done) {
                 _.promise.make({
                     configurationd: {
-                        path: tmp_json,
+                        path: _util.tmp_json,
                     },
                 })
-                    .then(fs.remove.p(tmp_json))
+                    .then(fs.remove.p(_util.tmp_json))
                     .then(cfg.initialize)
                     .then(cfg.load)
                     .then(_.promise.make(sd => {
@@ -86,10 +67,10 @@ describe("load", function() {
             it("no defaults, real path", function(done) {
                 _.promise.make({
                     configurationd: {
-                        path: tmp_json,
+                        path: _util.tmp_json,
                     },
                 })
-                    .then(_copy)
+                    .then(_util.copy)
                     .then(cfg.initialize)
                     .then(cfg.load)
                     .then(_.promise.make(sd => {
@@ -101,11 +82,11 @@ describe("load", function() {
             it("defaults, real path", function(done) {
                 _.promise.make({
                     configurationd: {
-                        path: tmp_json,
-                        defaults: defaults,
+                        path: _util.tmp_json,
+                        defaults: _util.defaults,
                     },
                 })
-                    .then(_copy)
+                    .then(_util.copy)
                     .then(cfg.initialize)
                     .then(cfg.load)
                     .then(_.promise.make(sd => {
@@ -121,10 +102,10 @@ describe("load", function() {
             it("no defaults, real path", function(done) {
                 _.promise.make({
                     configurationd: {
-                        path: tmp_json,
+                        path: _util.tmp_json,
                     },
                 })
-                    .then(_copy)
+                    .then(_util.copy)
                     .then(cfg.initialize)
                     .then(cfg.load.clear)
                     .then(_.promise.make(sd => {
@@ -136,14 +117,14 @@ describe("load", function() {
             it("defaults, real path", function(done) {
                 _.promise.make({
                     configurationd: {
-                        path: tmp_json,
-                        defaults: defaults,
+                        path: _util.tmp_json,
+                        defaults: _util.defaults,
                     },
                 })
-                    .then(_copy)
+                    .then(_util.copy)
                     .then(cfg.initialize)
                     .then(_.promise.make(sd => {
-                        assert.deepEqual(defaults, sd.cfg)
+                        assert.deepEqual(_util.defaults, sd.cfg)
                     }))
                     .then(cfg.load.clear)
                     .then(_.promise.make(sd => {
