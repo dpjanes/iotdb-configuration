@@ -6,7 +6,6 @@
 #   2017-12-28
 #
 
-exit 0
 PACKAGE=iotdb-configuration
 DIST_ROOT=/var/tmp/.dist.$$
 
@@ -32,9 +31,13 @@ echo "=================="
 
     tar cf - \
         --exclude "node_modules" \
+        --exclude "xx*" \
+        --exclude "yy*" \
+        --exclude "zz*" \
         README.md LICENSE \
         package.json \
         index.js \
+        lib/*.js \
         |
     ( cd "${NPM_DST}" && tar xvf - && npm publish ) || exit 1
     git commit -m "new release" package.json || exit 1
